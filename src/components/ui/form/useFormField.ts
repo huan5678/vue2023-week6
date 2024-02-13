@@ -1,7 +1,7 @@
+import { inject, type InjectionKey } from 'vue';
 import {
   FieldContextKey, useFieldError, useIsFieldDirty, useIsFieldTouched, useIsFieldValid,
 } from 'vee-validate';
-import { inject, type InjectionKey } from 'vue';
 
 export const FORM_ITEM_INJECTION_KEY: InjectionKey<string> = Symbol();
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { cva } from 'class-variance-authority';
+import { X } from 'lucide-vue-next';
 import {
   DialogClose,
   DialogContent,
@@ -7,24 +9,22 @@ import {
   DialogOverlay,
   DialogPortal,
   useEmitAsProps,
-} from 'radix-vue'
-import { X } from 'lucide-vue-next'
-import { cva } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
+} from 'radix-vue';
+import { cn } from '@/lib/utils';
 
 interface SheetContentProps extends DialogContentProps {
   side?: 'left' | 'right' | 'top' | 'bottom'
   class?: string
 }
 
-const props = defineProps<SheetContentProps>()
+const props = defineProps<SheetContentProps>();
 
-const emits = defineEmits<DialogContentEmits>()
+const emits = defineEmits<DialogContentEmits>();
 
-const emitsAsProps = useEmitAsProps(emits)
+const emitsAsProps = useEmitAsProps(emits);
 
 const sheetVariants = cva(
-  'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
+  'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out',
   {
     variants: {
       side: {
@@ -40,7 +40,7 @@ const sheetVariants = cva(
       side: 'right',
     },
   },
-)
+);
 </script>
 
 <template>
@@ -55,9 +55,9 @@ const sheetVariants = cva(
       <slot />
 
       <DialogClose
-        class="absolute top-4 right-4 p-0.5 transition-colors rounded-md hover:bg-secondary"
+        class="absolute right-4 top-4 rounded-md p-0.5 transition-colors hover:bg-secondary"
       >
-        <X class="w-4 h-4 text-muted-foreground" />
+        <X class="size-4 text-muted-foreground" />
       </DialogClose>
     </DialogContent>
   </DialogPortal>

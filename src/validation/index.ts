@@ -1,16 +1,13 @@
-import { configure, defineRule } from 'vee-validate';
-import { required } from '@vee-validate/rules';
-import { localize } from '@vee-validate/i18n';
+import { localize, setLocale } from '@vee-validate/i18n';
+import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
+import { configure } from 'vee-validate';
 
-import zh_TW from './locales/zh_TW.json';
-
-defineRule('required', required);
-
-configure({
-  generateMessage: localize({
-    zh_TW: {
-      messages: zh_TW.messages,
-    },
-  }),
-  validateOnInput: true,
-});
+(() => {
+  configure({
+    generateMessage: localize({
+      zh_TW: zhTW,
+    }),
+    validateOnInput: true,
+  });
+  setLocale('zh_TW');
+})();

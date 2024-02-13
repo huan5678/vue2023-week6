@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import { RouterLink } from 'vue-router';
-import { ShoppingCart, AlertTriangle } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
-import { Plus, Minus, Trash, Loader2 } from 'lucide-vue-next';
+import { RouterLink } from 'vue-router';
+import {
+  AlertTriangle, Loader2, Minus, Plus, ShoppingCart, Trash,
+} from 'lucide-vue-next';
+import { storeToRefs } from 'pinia';
 import { Button } from '@/components/ui/button';
-import { DialogTrigger, Dialog } from '@/components/ui/dialog';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
   SheetClose,
@@ -15,16 +18,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Separator } from '@/components/ui/separator';
 import { useCartStore } from '@/stores';
-import { storeToRefs } from 'pinia';
 import OrderForm from './OrderForm.vue';
 
 const isLoading = ref(false);
 
 const cartStore = useCartStore();
-const { cartData, final_total, isModalOpen, isCartOpen } =
-  storeToRefs(cartStore);
+const {
+  cartData, finalTotal, isModalOpen, isCartOpen,
+} = storeToRefs(cartStore);
 const { updateCartData, deleteCartData, getCartData } = cartStore;
 
 onMounted(async () => {
@@ -55,15 +57,20 @@ const handleClearCart = async () => {
 
 <template>
   <div
-    class="mx-auto flex h-[58px] max-w-8xl items-center justify-between py-8 select-none"
+    class="mx-auto flex h-[58px] max-w-7xl select-none items-center justify-between py-8"
   >
     <div class="flex gap-6 md:gap-8">
-      <RouterLink to="/" class="font-bold text-md"> LOGO </RouterLink>
-    </div>
-    <nav class="items-center justify-center hidden gap-6 md:flex">
       <RouterLink
         to="/"
-        class="text-sm font-medium transition-colors text-muted-foreground dark:hover:text-gray-300"
+        class="text-lg font-bold"
+      >
+        LOGO
+      </RouterLink>
+    </div>
+    <nav class="hidden items-center justify-center gap-6 md:flex">
+      <RouterLink
+        to="/"
+        class="text-sm font-medium text-muted-foreground transition-colors dark:hover:text-gray-300"
       >
         home
       </RouterLink>
@@ -73,33 +80,38 @@ const handleClearCart = async () => {
             :class="cartData.length > 0 && 'cart_count'"
             :data-count="cartData.length"
           >
-            <Button variant="outline" size="icon">
+            <Button
+              variant="outline"
+              size="icon"
+            >
               <ShoppingCart />
             </Button>
           </div>
         </SheetTrigger>
         <SheetContent
-          class="flex flex-col overflow-auto select-none rounded-l-xl"
+          class="flex select-none flex-col overflow-auto rounded-l-xl"
         >
-          <SheetHeader class="pb-4 border-b">
+          <SheetHeader class="border-b pb-4">
             <SheetTitle>購物車</SheetTitle>
           </SheetHeader>
           <SheetClose />
           <div v-if="cartData.length > 0">
             <div
-              class="flex flex-col gap-4"
               v-for="(item, index) in cartData"
               :key="item.id"
+              class="flex flex-col gap-4"
             >
               <div class="space-y-2">
                 <div class="flex gap-2">
                   <img
                     :src="item.product?.imageUrl"
                     alt="product image"
-                    class="w-16 h-16 rounded-md"
-                  />
-                  <div class="flex flex-col w-full gap-2">
-                    <h3 class="font-bold">{{ item.product?.title }}</h3>
+                    class="size-16 rounded-md"
+                  >
+                  <div class="flex w-full flex-col gap-2">
+                    <h3 class="font-bold">
+                      {{ item.product?.title }}
+                    </h3>
                     <p class="text-sm text-gray-500">
                       {{ item.product?.description }}
                     </p>
@@ -112,7 +124,10 @@ const handleClearCart = async () => {
                     size="icon"
                     @click="handleRemoveCart(item.id as string)"
                   >
-                    <Loader2 v-if="isLoading" class="animate-spin" />
+                    <Loader2
+                      v-if="isLoading"
+                      class="animate-spin"
+                    />
                     <Trash v-else />
                   </Button>
                   <div class="flex items-center gap-4">
@@ -127,7 +142,10 @@ const handleClearCart = async () => {
                         })
                       "
                     >
-                      <Loader2 v-if="isLoading" class="animate-spin" />
+                      <Loader2
+                        v-if="isLoading"
+                        class="animate-spin"
+                      />
                       <Minus v-else />
                     </Button>
                     <span class="font-bold">{{ item.qty }}</span>
@@ -141,7 +159,10 @@ const handleClearCart = async () => {
                         })
                       "
                     >
-                      <Loader2 v-if="isLoading" class="animate-spin" />
+                      <Loader2
+                        v-if="isLoading"
+                        class="animate-spin"
+                      />
                       <Plus v-else />
                     </Button>
                   </div>
@@ -149,13 +170,17 @@ const handleClearCart = async () => {
                 <Separator class="my-1" />
                 <div class="flex justify-between">
                   <div>
-                    <h3 class="text-sm text-gray-500">單價</h3>
+                    <h3 class="text-sm text-gray-500">
+                      單價
+                    </h3>
                     <span class="text-sm">{{
                       item.product?.price.toLocaleString()
                     }}</span>
                   </div>
                   <div>
-                    <h3 class="text-sm text-gray-500">小計</h3>
+                    <h3 class="text-sm text-gray-500">
+                      小計
+                    </h3>
                     <span class="font-bold">{{
                       (
                         (item.product?.price as number) * item.qty
@@ -164,30 +189,48 @@ const handleClearCart = async () => {
                   </div>
                 </div>
               </div>
-              <Separator v-if="index !== cartData.length - 1" class="my-1" />
+              <Separator
+                v-if="index !== cartData.length - 1"
+                class="my-1"
+              />
             </div>
           </div>
-          <div v-else class="flex flex-col items-center justify-center h-full">
-            <h3 class="text-2xl text-gray-500">購物車是空的</h3>
+          <div
+            v-else
+            class="flex h-full flex-col items-center justify-center"
+          >
+            <h3 class="text-2xl text-gray-500">
+              購物車是空的
+            </h3>
           </div>
-          <div class="flex flex-col mt-auto" v-if="cartData.length > 0">
+          <div
+            v-if="cartData.length > 0"
+            class="mt-auto flex flex-col"
+          >
             <Separator class="my-2" />
             <SheetDescription class="flex items-end justify-between py-4">
-              <Button variant="outline" @click="handleClearCart">
-                <Loader2 v-if="isLoading" class="animate-spin" />
-                <AlertTriangle v-else class="mr-4" />
+              <Button
+                variant="outline"
+                @click="handleClearCart"
+              >
+                <Loader2
+                  v-if="isLoading"
+                  class="animate-spin"
+                />
+                <AlertTriangle
+                  v-else
+                  class="mr-4"
+                />
                 清空購物車
               </Button>
-              <span class="text-sm text-gray-500"
-                >共 {{ cartData.length }} 項商品</span
-              >
+              <span class="text-sm text-gray-500">共 {{ cartData.length }} 項商品</span>
             </SheetDescription>
             <Separator class="my-2" />
             <div class="flex items-end justify-between">
-              <h3 class="text-2xl text-gray-500">總計</h3>
-              <span class="font-bold"
-                >NT$ {{ final_total.toLocaleString() }}</span
-              >
+              <h3 class="text-2xl text-gray-500">
+                總計
+              </h3>
+              <span class="font-bold">NT$ {{ finalTotal.toLocaleString() }}</span>
             </div>
             <SheetFooter class="mt-10">
               <Dialog v-model:open="isModalOpen">

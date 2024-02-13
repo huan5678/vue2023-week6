@@ -1,17 +1,13 @@
-<script lang="ts">
-import type { ToastRootEmits } from 'radix-vue'
-import { ToastProps } from './toast'
+<script lang="ts" setup>
+import { defineProps, defineEmits } from 'vue';
+import type { ToastRootEmits } from 'radix-vue';
+import { ToastRoot, useEmitAsProps } from 'radix-vue';
+import { cn } from '../../../lib/utils';
+import { ToastProps } from './toast';
+import { toastVariants } from '.';
 
-</script>
-
-<script setup lang="ts">
-import { ToastRoot, useEmitAsProps } from 'radix-vue'
-
-import { toastVariants } from '.'
-import { cn } from '../../../lib/utils'
-
-const props = defineProps<ToastProps>()
-const emits = defineEmits<ToastRootEmits>()
+const props = defineProps<ToastProps>();
+const emits = defineEmits<ToastRootEmits>();
 </script>
 
 <template>

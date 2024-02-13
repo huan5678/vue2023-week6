@@ -1,9 +1,9 @@
+import Cookies from 'js-cookie';
+import { defineStore } from 'pinia';
 import {
   handleLogin,
 } from '@/api';
-import { defineStore } from 'pinia';
 import { useMessageStore } from './message.store';
-import Cookies from 'js-cookie';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -18,12 +18,13 @@ export const useUserStore = defineStore('user', {
     async userLogin(username: string, password: string) {
       const { token, message, success } = await handleLogin(username, password);
       this.token = token;
-      console.log(token, message, success);
       this.showMessage(message as string);
-      if(token){
+      if (token) {
         Cookies.set('token', token);
       }
       return success;
-    }
-},
+    },
+  },
 });
+
+export default useUserStore;

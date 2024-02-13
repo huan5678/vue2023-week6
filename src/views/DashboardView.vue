@@ -1,22 +1,20 @@
 <script lang="ts" setup>
-import { handleCheck } from '@/api/index.ts';
-import Cookies from 'js-cookie';
 import { onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
 import { RouterView, useRouter } from 'vue-router';
-import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import { useUserStore, useMessageStore } from '@/stores';
-import { SimpleResponse } from '@/types';
 import { AxiosError } from 'axios';
-
+import Cookies from 'js-cookie';
+import { storeToRefs } from 'pinia';
+import { handleCheck } from '@/api';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useMessageStore, useUserStore } from '@/stores';
+import { SimpleResponse } from '@/types';
 
 const userStore = useUserStore();
 const { isLogin } = storeToRefs(userStore);
 const { showMessage } = useMessageStore();
 const router = useRouter();
 
-onMounted(async () =>
-{
+onMounted(async () => {
   try {
     if (!isLogin.value) {
       const token = Cookies.get('token') || '';

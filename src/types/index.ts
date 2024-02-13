@@ -74,6 +74,11 @@ interface SimpleResponse {
   message?: string;
 }
 
+interface CurrentSimpleResponse {
+  success: boolean;
+  message: string;
+}
+
 interface BaseResponse {
   success: boolean;
   pagination?: IPagination;
@@ -134,6 +139,7 @@ export type {
   ICart,
   ProductsData,
   SimpleResponse,
+  CurrentSimpleResponse,
   BaseResponse,
   ApiResponse,
   DynamicKeyResponse,

@@ -1,5 +1,5 @@
-import type { ToastRootProps } from 'radix-vue';
 import type { VariantProps } from 'class-variance-authority';
+import type { ToastRootProps } from 'radix-vue';
 
 interface ToastVariantProps extends VariantProps<typeof toastVariants> {}
 

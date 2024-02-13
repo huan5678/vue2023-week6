@@ -1,10 +1,9 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import '@/assets/main.css';
-
+import router from './router/index';
 import App from './App.vue';
-import router from './router/index.ts';
-import '@/validation/index.ts';
+import '@/assets/main.css';
+import '@/validation';
 
 const app = createApp(App);
 const pinia = createPinia();

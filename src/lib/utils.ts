@@ -1,42 +1,38 @@
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-import { camelize, getCurrentInstance, toHandlerKey } from 'vue';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-
+/* eslint-disable no-unused-vars */
+import type { FunctionalComponent } from 'vue';
+import {
+  camelize, defineComponent, getCurrentInstance, h, toHandlerKey,
+} from 'vue';
+import type { ClassValue } from 'clsx';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export type ParseEmits<T extends Record<string, any>> = {
   [K in keyof T]: (...args: T[K]) => void;
-};
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 // Vue doesn't have emits forwarding, in order to bind the emits we have to convert events into `onXXX` handlers
 // issue: https://github.com/vuejs/core/issues/5917
-
-export function useEmitAsProps<EventName extends string>(
-	emit: (name: EventName, ...args: any[]) => void
+export function useEmitAsProps<Name extends string>(
+  emit: (name: Name, ...args: any[]) => void,
 ) {
-	const result: Record<string, any> = {};
-	const vm = getCurrentInstance();
-	if (!vm) return result;
+  const vm = getCurrentInstance();
 
-	const events: EventName[] = Array.isArray(vm.type.emits)
-		? vm.type.emits
-		: typeof vm.type.emits === "object"
-		? Object.keys(vm.type.emits)
-		: [];
+  const events = vm?.type.emits as Name[];
+  const result: Record<string, any> = {};
 
-	if (!events.length) {
-		console.warn(
-			`No emitted event found. Please check component: ${vm.type.__name}`
-		);
-	}
+  events?.forEach((ev) => {
+    result[toHandlerKey(camelize(ev))] = (...arg: any) => emit(ev, ...arg);
+  });
+  return result;
+}
 
-	for (let i = 0; i < events.length; i++) {
-		result[toHandlerKey(camelize(events[i]!))] = (...args: any) =>
-			emit(events[i]!, ...args);
-	}
-
-	return result;
+export function convertToComponent(component: FunctionalComponent) {
+  return defineComponent({
+    setup() { return () => h(component); },
+  });
 }

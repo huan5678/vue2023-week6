@@ -1,5 +1,6 @@
 /* eslint-env node */
-require("@rushstack/eslint-patch/modern-module-resolution");
+// eslint-disable-next-line import/no-extraneous-dependencies
+require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
@@ -9,50 +10,71 @@ module.exports = {
     node: true,
   },
   extends: [
-    "plugin:vue/vue3-recommended",
-    "airbnb-base",
-    "eslint:recommended",
-    "@vue/eslint-config-typescript",
-    "@vue/eslint-config-prettier/skip-formatting",
+    'plugin:vue/vue3-recommended',
+    '@vue/eslint-config-typescript',
+    'airbnb-base',
+    'eslint:recommended',
+    'plugin:tailwindcss/recommended',
   ],
-  plugins: ["@typescript-eslint", "vue", "simple-import-sort"],
+  plugins: ['@typescript-eslint', 'vue', 'simple-import-sort'],
   parserOptions: {
-    ecmaVersion: "latest",
-    parser: "@typescript-eslint/parser",
+    ecmaVersion: 'latest',
+    parser: '@typescript-eslint/parser',
   },
+  overrides: [
+    {
+      files: ['*.vue'],
+      parser: 'vue-eslint-parser',
+    },
+  ],
   settings: {
-    "import/resolver": {
+    'import/resolver': {
       alias: {
-        map: [["@", "./src"]],
-        extensions: [".ts", ".js", ".jsx", ".json", ".vue"],
+        map: [['@', './src']],
+        extensions: ['.ts', '.js', '.jsx', '.json', '.vue'],
       },
     },
   },
   rules: {
-    "import/no-extraneous-dependencies": [
-      "error",
+    'import/extensions': ['error', 'ignorePackages', {
+      js: 'never',
+      mjs: 'never',
+      jsx: 'never',
+      ts: 'never',
+      tsx: 'never',
+    }],
+    'import/no-extraneous-dependencies': [
+      'error',
       {
-        devDependencies: ["**vite**", "**@vitejs**"],
+        devDependencies: ['**vite**', '**@vitejs**'],
         optionalDependencies: false,
       },
     ],
-    "arrow-body-style": "off",
-    "prefer-arrow-callback": "off",
-    "simple-import-sort/imports": [
-      "error",
+    'max-len': [
+      'error',
+      {
+        code: 120,
+        ignoreStrings: true,
+        ignorePattern: 'class="[^"]*"',
+      },
+    ],
+    'arrow-body-style': 'off',
+    'prefer-arrow-callback': 'off',
+    'simple-import-sort/imports': [
+      'error',
       {
         groups: [
           [
-            "^vue",
-            "^@?\\w",
-            "^@(/.*|$)",
-            "^\\.\\.(?!/?$)",
-            "^\\.\\./?$",
-            "^\\./(?=.*/)(?!/?$)",
-            "^\\.(?!/?$)",
-            "^\\./?$",
-            "^.+\\.?(css|less|scss)$",
-            "^\\u0000",
+            '^vue',
+            '^@?\\w',
+            '^@(/.*|$)',
+            '^\\.\\.(?!/?$)',
+            '^\\.\\./?$',
+            '^\\./(?=.*/)(?!/?$)',
+            '^\\.(?!/?$)',
+            '^\\./?$',
+            '^.+\\.?(css|less|scss)$',
+            '^\\u0000',
           ],
         ],
       },

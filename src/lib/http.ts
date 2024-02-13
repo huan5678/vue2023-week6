@@ -1,14 +1,14 @@
-import type { ApiResponse } from "@/types/index";
-import axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
-import Cookies from "js-cookie";
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import type { ApiResponse } from '@/types/index';
 
 const baseUrl = import.meta.env.VITE_BASE_URL as string;
 
 const apiPath = import.meta.env.VITE_API_PATH as string;
 
 function token() {
-  const cookieToken = Cookies.get("token");
+  const cookieToken = Cookies.get('token');
   return cookieToken;
 }
 
@@ -21,30 +21,29 @@ const http = axios.create({
 });
 
 http.interceptors.request.use((config) => {
+  const newConfig = { ...config };
   if (config.url) {
-    if (config.url.includes("signin")) {
-      config.baseURL = `${baseUrl}/admin`;
-    } else if (config.url.includes("logout") || config.url.includes("check")) {
-      config.baseURL = baseUrl;
+    if (config.url.includes('signin')) {
+      newConfig.baseURL = `${baseUrl}/admin`;
+    } else if (config.url.includes('logout') || config.url.includes('check')) {
+      newConfig.baseURL = baseUrl;
     } else {
-      config.baseURL = `${baseUrl}/api/${apiPath}`;
+      newConfig.baseURL = `${baseUrl}/api/${apiPath}`;
     }
   }
-  return config;
+  return newConfig;
 });
 
 // 錯誤處理攔截器
 http.interceptors.response.use(
   (response) => response,
-  (error) =>
-    // 處理錯誤響應
-    Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // 封裝 get 方法
 export async function get<T>(
   path: string,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<AxiosResponse<T>> {
   return http.get<T>(path, config);
 }
@@ -53,7 +52,7 @@ export async function get<T>(
 export async function post<T>(
   path: string,
   data?: any,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<AxiosResponse<T>> {
   return http.post<T>(path, data, config);
 }
@@ -62,7 +61,7 @@ export async function post<T>(
 export async function put<T>(
   path: string,
   data?: any,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<AxiosResponse<T>> {
   return http.put<T>(path, data, config);
 }
@@ -70,7 +69,7 @@ export async function put<T>(
 // 封裝 delete 方法
 export async function del<T>(
   path: string,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<AxiosResponse<T>> {
   return http.delete<T>(path, config);
 }
@@ -78,31 +77,25 @@ export async function del<T>(
 export function handleApiResponse<T>(response: ApiResponse<T>) {
   const result = {
     success: response.success,
-    message: "",
-    data: null,
+    message: '',
+    data: null as T | null,
   };
   // 檢查是否為 SimpleResponse
-  if ("message" in response) {
+  if ('message' in response) {
     result.message = response.message as string;
   }
 
   // 檢查是否為 DataResponse
-  if ("data" in response) {
-    result.data = response.data;
-  }
-
-  // 處理可能的 DynamicKeyResponse
-  if (response.success && !("data" in response) && !("message" in response)) {
-    // 使用 Object.keys 遍歷並找到除已知屬性外的動態鍵
+  if (response.success && !('data' in response) && !('message' in response)) {
     const dynamicKeys = Object.keys(response).filter(
-      (key) => key !== "success" && key !== "pagination" && key !== "messages"
+      (key) => key !== 'success' && key !== 'pagination' && key !== 'messages',
     );
-    for (const key of dynamicKeys) {
+    dynamicKeys.forEach((key) => {
       const dynamicData = response[key as keyof typeof response];
       if (dynamicData) {
-        result.data = dynamicData;
+        result.data = dynamicData as T | null;
       }
-    }
+    });
   }
 
   return result;

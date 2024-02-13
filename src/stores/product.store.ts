@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { handleGetProducts, handleGetAdminProducts } from '@/api';
+import { handleGetAdminProducts, handleGetProducts } from '@/api';
 import { IProduct, ProductsData } from '@/types';
 
 export const useProductStore = defineStore('product', {
@@ -31,8 +31,7 @@ export const useProductStore = defineStore('product', {
       const { data } = await handleGetProducts(page, category);
       this.products = data as IProduct[];
     },
-    async tempRest()
-    {
+    async tempRest() {
       this.temp = {
         id: '',
         title: '',
@@ -50,3 +49,5 @@ export const useProductStore = defineStore('product', {
     },
   },
 });
+
+export default useProductStore;

@@ -1,15 +1,16 @@
+import { AxiosResponse } from 'axios';
 import {
-  get, post, put, del,
+  del,
+  get, post, put,
 } from '@/lib/http';
 import type {
   ApiResponse,
   CartResponse,
-  DynamicKeyResponse, IProduct, IUser, ItemResponse, LoginResponse,
+  DynamicKeyResponse, IProduct, ItemResponse, IUser, LoginResponse,
   OrderResponse,
   ProductResponse,
   SimpleResponse,
 } from '@/types/';
-import { AxiosResponse } from 'axios';
 
 export async function handleCheck(token: string): Promise<ItemResponse<{token: string}> | SimpleResponse> {
   try {
@@ -227,10 +228,9 @@ export async function handleAddAdminProduct(product: IProduct): Promise<SimpleRe
   }
 }
 
-export async function handleUpLoadImage(e: Event): Promise<string>
-{
+export async function handleUpLoadImage(e: Event): Promise<string> {
   const target = e.target as HTMLInputElement;
-  const file: File = (target.files as FileList)[ 0 ];
+  const file: File = (target.files as FileList)[0];
   const formData = new FormData();
   formData.append('file-to-upload', file);
   try {

@@ -1,10 +1,24 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { AxiosError } from 'axios';
 import { ThumbsUp } from 'lucide-vue-next';
+import { storeToRefs } from 'pinia';
+import { handleDeleteAdminProduct, handleUpdateAdminProduct } from '@/api';
+import EditModal from '@/components/EditModal.vue';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import
+{
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import
 {
   Tooltip,
@@ -12,26 +26,8 @@ import
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import
-{
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from '@/components/ui/dialog';
-
-import EditModal from '@/components/EditModal.vue';
-
-
 import { useMessageStore, useProductStore } from '@/stores';
-import { storeToRefs } from 'pinia';
 import { SimpleResponse } from '@/types';
-import { handleUpdateAdminProduct, handleDeleteAdminProduct } from '@/api';
-import { AxiosError } from 'axios';
 
 const messageStore = useMessageStore();
 const { showMessage } = messageStore;
@@ -45,12 +41,11 @@ const router = useRouter();
 const isLoading = ref('');
 
 onMounted(
-  async () =>
-  {
+  async () => {
     try {
       await getAdminProducts();
-      const id = router.currentRoute.value.params.id;
-      const product = productsData.value[ id as string ];
+      const { id } = router.currentRoute.value.params;
+      const product = productsData.value[id as string];
       temp.value = {
         ...product,
         id: id as string,
@@ -60,28 +55,23 @@ onMounted(
     } catch (error: unknown) {
       showMessage((error as Error).message);
     }
-  });
+  },
+);
 
-
-function handleCloseModal()
-{
+function handleCloseModal() {
   isModalOpen.value = false;
   tempRest();
 }
 
-
-const dynamicIsLoading = computed(() =>
-{
+const dynamicIsLoading = computed(() => {
   return isLoading.value;
 });
 
-function handleLoading(id: string)
-{
+function handleLoading(id: string) {
   isLoading.value = id;
 }
 
-async function handleUpdateProduct()
-{
+async function handleUpdateProduct() {
   try {
     isLoading.value = temp.value.id;
     const res = await handleUpdateAdminProduct(temp.value.id as string, {
@@ -102,8 +92,7 @@ async function handleUpdateProduct()
   }
 }
 
-async function handleDeleteProduct(id: string)
-{
+async function handleDeleteProduct(id: string) {
   try {
     await handleDeleteAdminProduct(id);
     showMessage('刪除成功');
@@ -117,35 +106,49 @@ async function handleDeleteProduct(id: string)
 
 <template>
   <main class="container py-20">
-    <div class="flex flex-col" v-if="temp && temp.title !== undefined">
+    <div
+      v-if="temp && temp.title !== undefined"
+      class="flex flex-col"
+    >
       <div class="grid grid-cols-3 gap-2">
-        <img :src="temp.imageUrl"
-             class="object-cover object-center w-full col-span-2 rounded aspect-video max-h-80"
-             alt="主圖" />
+        <img
+          :src="temp.imageUrl"
+          class="col-span-2 aspect-video max-h-80 w-full rounded object-cover object-center"
+          alt="主圖"
+        >
         <div class="flex flex-wrap gap-2">
-          <img :src="img" class="object-cover object-center rounded max-h-48" alt=""
-               v-for="img in temp.imagesUrl" />
+          <img
+            v-for="img in temp.imagesUrl"
+            :key="img"
+            :src="img"
+            class="max-h-48 rounded object-cover object-center"
+            alt=""
+          >
         </div>
       </div>
       <div class="flex flex-col gap-2 py-4">
-        <div class="flex items-center gap-4 pb-2 border-b">
+        <div class="flex items-center gap-4 border-b pb-2">
           <h5 class="text-2xl font-medium">
             {{ temp.title }}
           </h5>
-          <Badge>{{
-            temp.category
-          }}</Badge>
+          <Badge>
+            {{
+              temp.category
+            }}
+          </Badge>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger as-child>
                 <div
-                     :class="`p-2 ml-auto rounded ${temp.top ? 'bg-amber-400 text-gray-50' : 'bg-gray-200 text-gray-700'}`">
-                  <ThumbsUp class="w-6 h-6" />
+                  :class="`p-2 ml-auto rounded ${temp.top ? 'bg-amber-400 text-gray-50' : 'bg-gray-200 text-gray-700'}`"
+                >
+                  <ThumbsUp class="size-6" />
                 </div>
               </TooltipTrigger>
               <TooltipContent>
                 <div
-                     :class="`p-2 text-sm  ${temp.top ? 'text-amber-500' : 'text-gray-700 bg-white'}`">
+                  :class="`p-2 text-sm  ${temp.top ? 'text-amber-500' : 'text-gray-700 bg-white'}`"
+                >
                   {{ temp.top ? '熱門商品' : '普通商品' }}
                 </div>
               </TooltipContent>
@@ -163,11 +166,15 @@ async function handleDeleteProduct(id: string)
         </div>
       </div>
 
-      <div class="flex justify-between gap-4 mt-4">
+      <div class="mt-4 flex justify-between gap-4">
         <Dialog>
           <DialogTrigger as-child>
-            <Button type="button" variant="outline" :disabled="dynamicIsLoading === temp.id"
-                    class="w-1/3 text-red-500 border-red-500 hover:bg-red-500 hover:text-white">
+            <Button
+              type="button"
+              variant="outline"
+              :disabled="dynamicIsLoading === temp.id"
+              class="w-1/3 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+            >
               刪除產品
             </Button>
           </DialogTrigger>
@@ -176,17 +183,26 @@ async function handleDeleteProduct(id: string)
               <DialogTitle>刪除產品</DialogTitle>
             </DialogHeader>
             <DialogDescription>
-              <p>確定要刪除產品 <span class="text-xl font-medium text-red-500">{{ temp.title }}</span>
+              <p>
+                確定要刪除產品 <span class="text-xl font-medium text-red-500">{{ temp.title }}</span>
                 嗎？
               </p>
             </DialogDescription>
             <DialogFooter>
-              <Button type="button" variant="destructive" class="w-1/2 mr-6"
-                      @click="handleDeleteProduct(temp.id as string)">
+              <Button
+                type="button"
+                variant="destructive"
+                class="mr-6 w-1/2"
+                @click="handleDeleteProduct(temp.id as string)"
+              >
                 確認
               </Button>
               <DialogClose as-child>
-                <Button type="button" variant="outline" class="w-1/2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  class="w-1/2"
+                >
                   取消
                 </Button>
               </DialogClose>
@@ -195,14 +211,28 @@ async function handleDeleteProduct(id: string)
         </Dialog>
         <Dialog v-model:open="isModalOpen">
           <DialogTrigger as-child>
-            <Button type="button" class="w-1/3 text-white bg-blue-700 hover:bg-blue-900" @click="
-              isModalOpen = true;
-            ">編輯產品</Button>
+            <Button
+              type="button"
+              class="w-1/3 bg-blue-700 text-white hover:bg-blue-900"
+              @click="
+                isModalOpen = true;
+              "
+            >
+              編輯產品
+            </Button>
           </DialogTrigger>
-          <EditModal v-if="isModalOpen" :openProductForm="isModalOpen" :formStatus="'編輯'" :temp="temp"
-                     :isLoading="dynamicIsLoading" @reset="tempRest" @onCloseModal="handleCloseModal"
-                     @onUpdateProduct="handleUpdateProduct" @onSetMessage="showMessage"
-                     @onLoading="handleLoading" />
+          <EditModal
+            v-if="isModalOpen"
+            :open-product-form="isModalOpen"
+            :form-status="'編輯'"
+            :temp="temp"
+            :is-loading="dynamicIsLoading"
+            @reset="tempRest"
+            @on-close-modal="handleCloseModal"
+            @update-product="handleUpdateProduct"
+            @on-set-message="showMessage"
+            @on-loading="handleLoading"
+          />
         </Dialog>
       </div>
     </div>

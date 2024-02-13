@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia';
 import {
   handleAddToCart,
   handleDeleteAllCart,
@@ -5,13 +6,13 @@ import {
   handleEditCart,
   handleGetCart,
 } from '@/api';
-import { defineStore } from 'pinia';
+import { CurrentSimpleResponse, ICart } from '@/types';
 import { useMessageStore } from './message.store';
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
-    cartData: [] as Cart[],
-    final_total: 0,
+    cartData: [] as ICart[],
+    finalTotal: 0,
     cartId: '',
     isCartOpen: false,
     isModalOpen: false,
@@ -22,9 +23,9 @@ export const useCartStore = defineStore('cart', {
       messageStore.showMessage(message);
     },
     async getCartData() {
-      const { data } = await handleGetCart();
+      const { data } = await handleGetCart() as unknown as {data: {carts: ICart[]; final_total: number; id: string}};
       this.cartData = data.carts;
-      this.final_total = data.final_total;
+      this.finalTotal = data.final_total;
       this.cartId = data.id;
     },
     async performCartAction(action: () => Promise<{success: boolean; message: string}>) {
@@ -47,16 +48,18 @@ export const useCartStore = defineStore('cart', {
       this.isModalOpen = false;
     },
     async addCartData(id: string, qty: number) {
-      await this.performCartAction(() => handleAddToCart(id, qty));
+      await this.performCartAction(() => handleAddToCart(id, qty) as unknown as Promise<CurrentSimpleResponse>);
     },
     async updateCartData(id: string, product: {id: string; qty: number}) {
-      await this.performCartAction(() => handleEditCart(id, product));
+      await this.performCartAction(() => handleEditCart(id, product) as unknown as Promise<CurrentSimpleResponse>);
     },
     async deleteCartData(id: string) {
-      await this.performCartAction(() => handleDeleteCart(id));
+      await this.performCartAction(() => handleDeleteCart(id) as unknown as Promise<CurrentSimpleResponse>);
     },
     async clearCartData() {
-      await this.performCartAction(() => handleDeleteAllCart());
+      await this.performCartAction(() => handleDeleteAllCart() as unknown as Promise<CurrentSimpleResponse>);
     },
   },
 });
+
+export default useCartStore;

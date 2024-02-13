@@ -18,3 +18,5 @@ export const useMessageStore = defineStore('message', {
     },
   },
 });
+
+export default useMessageStore;
