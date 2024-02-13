@@ -4,6 +4,7 @@ import {
   get, post, put,
 } from '@/lib/http';
 import type {
+  AddCartResponse,
   ApiResponse,
   CartResponse,
   DynamicKeyResponse, IProduct, ItemResponse, IUser, LoginResponse,
@@ -85,14 +86,14 @@ export async function handleGetCart(): Promise<CartResponse> {
   }
 }
 
-export async function handleAddToCart(id: string, qty: number): Promise<ApiResponse<IProduct>> {
+export async function handleAddToCart(id: string, qty: number): Promise<AddCartResponse> {
   try {
     const { data } = await post('/cart', {
       data: {
         product_id: id,
         qty,
       },
-    }) as AxiosResponse<ApiResponse<IProduct>>;
+    }) as AxiosResponse<AddCartResponse>;
     return data;
   } catch (error: unknown) {
     return Promise.reject(error);

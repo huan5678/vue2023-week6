@@ -108,6 +108,10 @@ type ProductResponse = ItemResponse<{
   message: string
 }>;
 
+type AddCartResponse = SimpleResponse & {
+  data: ICart;
+};
+
 type CartResponse = ItemResponse<{
   data: {
     carts: ICart[];
@@ -146,6 +150,7 @@ export type {
   DataResponse,
   ItemResponse,
   LoginResponse,
+  AddCartResponse,
   CartResponse,
   OrderResponse,
   ProductResponse,

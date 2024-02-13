@@ -58,6 +58,8 @@ onMounted(async () => {
         <Card
           v-for="item in productsData"
           :key="item.id"
+          class="cursor-pointer transition duration-300 ease-in-out hover:shadow-md"
+          @click="() => $router.push(`/product/${item.id}`)"
         >
           <CardHeader>
             <CardTitle>{{ item.title }}</CardTitle>
