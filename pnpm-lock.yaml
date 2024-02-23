@@ -50,6 +50,9 @@ dependencies:
   vee-validate:
     specifier: ^4.12.5
     version: 4.12.5(vue@3.4.15)
+  vite-plugin-env-compatible:
+    specifier: ^2.0.1
+    version: 2.0.1
   vue:
     specifier: ^3.4.15
     version: 3.4.15(typescript@5.3.2)
@@ -1840,6 +1843,15 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /dotenv-expand@5.1.0:
+    resolution: {integrity: sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==}
+    dev: false
+
+  /dotenv@8.2.0:
+    resolution: {integrity: sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==}
+    engines: {node: '>=8'}
+    dev: false
 
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -3908,6 +3920,13 @@ packages:
       '@vue/devtools-api': 6.5.1
       type-fest: 4.10.2
       vue: 3.4.15(typescript@5.3.2)
+    dev: false
+
+  /vite-plugin-env-compatible@2.0.1:
+    resolution: {integrity: sha512-DRrOZTg/W44ojVQQfGSMPEgYQGzp5TeIpt9cpaK35hTOC/b2D7Ffl8/RIgK8vQ0mlnDIUgETcA173bnMEkyzdw==}
+    dependencies:
+      dotenv: 8.2.0
+      dotenv-expand: 5.1.0
     dev: false
 
   /vite@5.0.11(@types/node@20.11.10):
