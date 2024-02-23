@@ -1,6 +1,49 @@
-# vue2023-hexschool-week6
+# vue2023-hexschool-week7
 
 This template should help get you started developing with Vue 3 in Vite.
+
+## 第七週 - 網頁美感大揭密
+
+作業資源：
+主線任務
+在先前的課程中，已經介紹了登入、產品列表的製作，請同學完成剩下功能，並整合至 Vite 中。另外還要請大家確定好最終作業的主題唷！
+
+## 後台
+
+### 產品頁面：
+
+* 串接取得、新增、刪除、更新產品 API
+* 啟用狀態顯示
+* Modal 細節欄位
+* 上傳圖片API
+* 分頁功能
+
+### 訂單頁面：
+
+* 串接取得、刪除、更新訂單 API
+* Modal 細節欄位
+* 付款狀態切換
+* 分頁功能
+
+### 優惠券頁面：
+
+* 串接取得、新增、刪除、更新優惠券 API
+* 啟用狀態顯示
+* Modal 細節欄位
+* 分頁功能
+
+### 貼文頁面（加分項目）：
+
+* 串接取得、新增、刪除、更新貼文 API
+* 啟用公開狀態
+* Modal 細節欄位
+* 分頁功能
+* 登入 / 登出
+
+### 小功能
+
+* alert、loading 元件
+* 串接圖片上傳 API
 
 ## Recommended IDE Setup
 
