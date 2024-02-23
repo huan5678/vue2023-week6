@@ -3,9 +3,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import type { ApiResponse } from '@/types/index';
 
-const baseUrl = import.meta.env.VITE_BASE_URL as string;
+const baseUrl = import.meta.env.VITE_BASE_URL as string || 'https://ec-course-api.hexschool.io/v2';  // github pages 爛東西
 
-const apiPath = import.meta.env.VITE_API_PATH as string;
+const apiPath = import.meta.env.VITE_API_PATH as string || 'synthwave'; // github pages 爛東西
 
 function token() {
   const cookieToken = Cookies.get('token');
