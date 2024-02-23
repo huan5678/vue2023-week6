@@ -51,6 +51,9 @@ jobs:
         run: pnpm install # or pnpm install / yarn install / bun install
       - name: Build with VitePress
         run: pnpm build
+        env:
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+          VITE_API_PATH: ${{ secrets.VITE_API_PATH }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
